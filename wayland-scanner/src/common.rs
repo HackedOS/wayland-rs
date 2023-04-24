@@ -6,6 +6,8 @@ use quote::{format_ident, quote, ToTokens};
 
 use crate::{protocol::*, util::*, Side};
 
+use strum_macros::EnumDiscriminants;
+
 pub(crate) fn generate_enums_for(interface: &Interface) -> TokenStream {
     interface.enums.iter().map(ToTokens::into_token_stream).collect()
 }
@@ -80,8 +82,9 @@ impl ToTokens for Enum {
             enum_decl = quote! {
                 #doc_attr
                 #[repr(u32)]
-                #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+                #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, EnumDiscriminants)]
                 #[non_exhaustive]
+                
                 pub enum #ident {
                     #(#variants,)*
                 }
